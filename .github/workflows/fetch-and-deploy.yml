@@ -1,0 +1,40 @@
+name: Fetch papers and deploy site
+
+on:
+  push:
+    branches: [main, master]
+  schedule:
+    # 每天 UTC 6:00 跑一次（约北京时间 14:00）
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  fetch-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch papers
+        run: python scripts/fetch_all.py
+
+      - name: Prepare site (web + data)
+        run: |
+          mkdir -p _site
+          cp -r web/* _site/
+          mkdir -p _site/data
+          cp data/*.json _site/data/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site
+          force_orphan: true
