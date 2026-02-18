@@ -7,7 +7,7 @@ import sys
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 os.chdir(ROOT)
-scripts = ["fetch_arxiv.py", "fetch_pwc.py", "fetch_hf_papers.py"]
+scripts = ["fetch_arxiv.py", "fetch_hf_papers.py"]
 for name in scripts:
     path = os.path.join(ROOT, "scripts", name)
     r = subprocess.run([sys.executable, path], cwd=ROOT)

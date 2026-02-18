@@ -13,7 +13,7 @@ function doGet(e) {
   var authors = (params.authors != null) ? decodeURIComponent(params.authors) : '';
   var paperLink = (params.paper_link != null) ? decodeURIComponent(params.paper_link) : '';
   sheet.insertRowBefore(2);
-  sheet.getRange(2, 1, 2, 5).setValues([[dateStr, title, authors, '', paperLink]]);
+  sheet.getRange(2, 1, 1, 5).setValues([[dateStr, title, authors, '', paperLink]]);
   return ContentService.createTextOutput(JSON.stringify({ ok: true, message: 'Added to sheet' }))
     .setMimeType(ContentService.MimeType.JSON);
 }

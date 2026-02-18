@@ -1,6 +1,6 @@
 # Paper Sharing — 论文选读与已读记录
 
-从 arXiv、Papers With Code、Hugging Face Daily Papers 浏览热文，一键加入你的 Google Sheet 已读列表。
+从 arXiv、Hugging Face Daily Papers 浏览热文，一键加入你的 Google Sheet 已读列表。
 
 ## 项目结构
 
@@ -52,14 +52,13 @@ python -m http.server 8080
    - 添加 `SHEET_APPEND_URL`：你的 Apps Script 网络应用 URL
    - 添加 `MY_SHEET_LINK`：你的 Google Sheet 链接（可选，用于「我的已读列表」按钮）
    - 若未设置 Secrets，部署时使用 `config.example.js` 占位符，「加入我的列表」按钮将不显示
-4. 推送后 workflow 会自动：拉取 arXiv/PWC/HF 数据 → 构建站点 → 发布到 gh-pages。完成后在 Settings → Pages 里看到站点地址（如 `https://<用户名>.github.io/<仓库名>/`）。
+4. 推送后 workflow 会自动：拉取 arXiv/HF 数据 → 构建站点 → 发布到 gh-pages。完成后在 Settings → Pages 里看到站点地址（如 `https://<用户名>.github.io/<仓库名>/`）。
 5. 每日定时（UTC 6:00）会重新拉数据并部署；也可在 Actions 页手动运行「Fetch papers and deploy site」。
 
 ## 4. 数据来源说明
 
 - **arXiv**：官方 API，按 `cs.LG` 等分类取近期论文。
-- **Papers With Code**：爬取 trending 页，可能随网站改版需微调。
-- **Hugging Face Daily Papers**：请求社区接口或爬取 [huggingface.co/papers](https://huggingface.co/papers)，格式与脚本可能随 HF 更新需调整。
+- **Hugging Face Daily Papers**：从 [huggingface.co/papers](https://huggingface.co/papers) 镜像页解析每日论文，格式可能随 HF 更新需调整。
 
 ## 5. 「已读列表」表格列
 
