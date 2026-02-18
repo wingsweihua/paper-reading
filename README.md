@@ -23,7 +23,7 @@ paper-sharing/
    - 执行身份：**以我的身份**
    - 谁可以访问：**所有人**（或「仅知道链接的用户」）
 5. 部署后复制 **网络应用 URL**（形如 `https://script.google.com/macros/s/xxxxx/exec`）。
-6. 在 `web/config.js` 里把 `SHEET_APPEND_URL` 改成这个 URL。
+6. **本地开发**：复制 `web/config.example.js` 为 `web/config.js`，填入 `SHEET_APPEND_URL` 和 `MY_SHEET_LINK`。`config.js` 已在 `.gitignore` 中，不会提交到仓库。
 
 ## 2. 本地生成数据并预览网站
 
@@ -47,8 +47,13 @@ python -m http.server 8080
 
 1. 在 GitHub 新建仓库，把本项目推上去。
 2. **Settings → Pages → Source** 选 **GitHub Actions**。
-3. 推送后 workflow 会自动：拉取 arXiv/PWC/HF 数据 → 构建站点 → 发布到 gh-pages。完成后在 Settings → Pages 里看到站点地址（如 `https://<用户名>.github.io/<仓库名>/`）。
-4. 每日定时（UTC 6:00）会重新拉数据并部署；也可在 Actions 页手动运行「Fetch papers and deploy site」。
+3. **添加 GitHub Secrets**（用于注入配置，避免敏感 URL 暴露在公开仓库）：
+   - **Settings → Secrets and variables → Actions** → New repository secret
+   - 添加 `SHEET_APPEND_URL`：你的 Apps Script 网络应用 URL
+   - 添加 `MY_SHEET_LINK`：你的 Google Sheet 链接（可选，用于「我的已读列表」按钮）
+   - 若未设置 Secrets，部署时使用 `config.example.js` 占位符，「加入我的列表」按钮将不显示
+4. 推送后 workflow 会自动：拉取 arXiv/PWC/HF 数据 → 构建站点 → 发布到 gh-pages。完成后在 Settings → Pages 里看到站点地址（如 `https://<用户名>.github.io/<仓库名>/`）。
+5. 每日定时（UTC 6:00）会重新拉数据并部署；也可在 Actions 页手动运行「Fetch papers and deploy site」。
 
 ## 4. 数据来源说明
 

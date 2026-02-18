@@ -32,6 +32,23 @@ jobs:
           mkdir -p _site/data
           cp data/*.json _site/data/
 
+      - name: Create config.js from secrets
+        env:
+          SHEET_APPEND_URL: ${{ secrets.SHEET_APPEND_URL }}
+          MY_SHEET_LINK: ${{ secrets.MY_SHEET_LINK }}
+        run: |
+          if [ -n "$SHEET_APPEND_URL" ]; then
+            python3 -c "
+          import os
+          u = os.environ.get('SHEET_APPEND_URL', '')
+          m = os.environ.get('MY_SHEET_LINK', '#')
+          c = 'window.PAPER_SHARING_CONFIG = {\n  SHEET_APPEND_URL: \"' + u + '\",\n  MY_SHEET_LINK: \"' + m + '\",\n};\n'
+          open('_site/config.js', 'w').write(c)
+          "
+          else
+            cp web/config.example.js _site/config.js
+          fi
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

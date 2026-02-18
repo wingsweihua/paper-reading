@@ -3,5 +3,6 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+web/config.js
 # 可选：若只依赖 Actions 生成数据可不提交 data 变更
 # data/*.json
