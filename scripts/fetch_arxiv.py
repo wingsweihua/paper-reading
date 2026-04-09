@@ -7,7 +7,11 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from urllib.parse import urlencode, urljoin
 
+import time
+
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # 分类与数量
 CATEGORIES = ["cs.LG", "cs.CL", "cs.AI", "stat.ML"]
@@ -16,11 +20,20 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 ARXiv_API = "http://export.arxiv.org/api/query"
 
 
+def _session_with_retries():
+    session = requests.Session()
+    retries = Retry(total=5, backoff_factor=2, status_forcelist=[429, 500, 502, 503, 504])
+    session.mount("http://", HTTPAdapter(max_retries=retries))
+    session.mount("https://", HTTPAdapter(max_retries=retries))
+    return session
+
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     query = " OR ".join(f"cat:{c}" for c in CATEGORIES)
     params = {"search_query": query, "sortBy": "submittedDate", "max_results": MAX_RESULTS}
-    resp = requests.get(ARXiv_API, params=params, timeout=30)
+    session = _session_with_retries()
+    resp = session.get(ARXiv_API, params=params, timeout=60)
     resp.raise_for_status()
     root = ET.fromstring(resp.content)
     ns = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
