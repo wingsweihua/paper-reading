@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paper Sharing — 论文选读</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Paper Sharing</h1>
+    <p class="subtitle">arXiv · Hugging Face Daily Papers</p>
+    <a class="sheet-link" href="#" target="_blank" rel="noopener">📋 我的已读列表</a>
+  </header>
+
+  <nav class="tabs">
+    <button type="button" data-tab="arxiv" class="active">arXiv</button>
+    <button type="button" data-tab="hf">HF Papers</button>
+  </nav>
+
+  <main>
+    <section id="arxiv" class="tab-panel active" data-source="arxiv.json"></section>
+    <section id="hf" class="tab-panel" data-source="hf-papers.json"></section>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      var path = window.location.pathname || "";
+      // 本地用 web/index.html 打开时用 ../data/；部署后页面在根或 /repo/ 下用 data/
+      window.DATA_BASE = (path.indexOf("/web/") !== -1 || path.endsWith("web")) ? "../" : "";
+    })();
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
